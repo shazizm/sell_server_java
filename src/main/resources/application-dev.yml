@@ -1,0 +1,13 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /sell
+#logging:
+#  pattern:
+#    console: "%d - %msg%n"
+##  path: /Users/zhangming/log/
+#  file: /Users/zhangming/log/sell.log
+##  指定日志级别，默认info
+#  level:
+##   指定特殊类的级别
+#    com.imooc.sell.LoggerTest: debug
