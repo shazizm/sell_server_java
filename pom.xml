@@ -69,6 +69,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <!-- 微信sdk 公众号（订阅号 和 服务号）-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
