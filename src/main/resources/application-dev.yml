@@ -1,7 +1,7 @@
 server:
   port: 8080
-#  servlet:
-#    context-path: /sell
+  servlet:
+    context-path: /sell
 #logging:
 #  pattern:
 #    console: "%d - %msg%n"
@@ -11,3 +11,7 @@ server:
 #  level:
 ##   指定特殊类的级别
 #    com.imooc.sell.LoggerTest: debug
+
+wechat:
+  mpAppId: wx2f8a32822d551206
+  mpAppSecret: b75b7137c3b0345c8ac5318d9708d132
