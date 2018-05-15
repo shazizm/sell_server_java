@@ -31,9 +31,10 @@ public class WechatController {
     //2. 调用方法
     //要求授权用户信息 带上跳转url 向微信 要 code
     @GetMapping("/authorize")
-    public String authorize(@RequestParam("returnUrl") String returnUrl) {
+    public String authorize(@RequestParam("state") String returnUrl) {
 
         String url = "http://mishi.fantreal.com/sell/wechat/userInfo";
+        //第一个参数是 redirectUrl，第二个参数是 scope，第三个参数是 state
         String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl)); //TODO
         log.info("【微信网页授权】获取code，result={}", redirectUrl);
 
@@ -51,11 +52,11 @@ public class WechatController {
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
         } catch (WxErrorException e) {
             log.error("【微信网页授权】");
-            throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getError().getErrorMsg())
+            throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getError().getErrorMsg());
         }
         //如果没问题，就可以用getOpenId()来获取openid
         String openId = wxMpOAuth2AccessToken.getOpenId();
 
-        return "redirect: " + returnUrl + "?openid=" + openId; //这里的 returnUrl 一般就是你要提供服务的网址，后面带上openid就是为了用户识别登陆用。
+        return "redirect:" + returnUrl + "?openid=" + openId; //这里的 returnUrl 一般就是你要提供服务的网址，后面带上openid就是为了用户识别登陆用。
     }
 }
