@@ -15,3 +15,7 @@ server:
 wechat:
   mpAppId: wx2f8a32822d551206
   mpAppSecret: b75b7137c3b0345c8ac5318d9708d132
+  mchId: mchIdxxxxxx
+  mchKey: mchKeyxxxxxx
+  mchKeyPath: /var/weichat_cert/h5.p12
+  notifyUrl: http://mishi.fantreal.com/sell/pay/notify

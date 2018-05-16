@@ -75,6 +75,17 @@
             <artifactId>weixin-java-mp</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!-- 微信支付 老师的sdk (支付宝支付，微信支付)-->
+        <dependency>
+            <groupId>cn.springboot</groupId>
+            <artifactId>best-pay-sdk</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <!--freemarker 动态注入 pay.html 参数用 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
