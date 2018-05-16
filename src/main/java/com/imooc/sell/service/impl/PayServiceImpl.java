@@ -21,7 +21,7 @@ public class PayServiceImpl implements PayService {
     private BestPayServiceImpl bestPayService;
 
     @Override
-    public void create(OrderDTO orderDTO) {
+    public PayResponse create(OrderDTO orderDTO) {
 
         //用了和授权一样的方式，先在外部配置 (BestPayServiceImpl) 好了，就不用下面这样搞了,
 //        BestPayServiceImpl bestPayService = new BestPayServiceImpl();
@@ -44,6 +44,8 @@ public class PayServiceImpl implements PayService {
         log.info("【微信支付】request={}", JsonUtil.toJson(payRequest));
 
         PayResponse payResponse = bestPayService.pay(payRequest); //TODO 重点标注 这里之后开通完商户平台 要再跑一下debug测试 这一步如果成功了 统一下单就算拿到了prepayId
-        log.info("【微信支付response】={}", JsonUtil.toJson(payResponse));
+        log.info("【微信支付response】={}", JsonUtil.toJson(payResponse)); //将对象转成 json 输出log显示
+
+        return payResponse;
     }
 }
