@@ -9,9 +9,7 @@ import com.imooc.sell.service.PayService;
 import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -46,6 +44,11 @@ public class PayController {
         //返回时使用了 resources/templates/pay/create.frl  ，这里 ModelAndView 第一个传视图的模板名称，第二个传参数，是个map
         return new ModelAndView("pay/create", map); //这里使用了模板概念，当访问http://mishi.fantreal.com/sell/pay/create，就返回模板
 
+    }
 
+    @PostMapping("/notify") //../sell/pay/notify
+    public void notify(@RequestBody String notifyData) {
+
+        payService.notify(notifyData);
     }
 }
