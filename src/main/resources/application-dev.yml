@@ -17,5 +17,5 @@ wechat:
   mpAppSecret: b75b7137c3b0345c8ac5318d9708d132
   mchId: mchIdxxxxxx
   mchKey: mchKeyxxxxxx
-  mchKeyPath: /var/weichat_cert/h5.p12
+  mchKeyPath: /var/weichat_cert/h5.p12 #证书的下载，参考8-7 微信退款，实际支付也是需要的
   notifyUrl: http://mishi.fantreal.com/sell/pay/notify

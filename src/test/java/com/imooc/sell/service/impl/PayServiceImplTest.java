@@ -1,6 +1,7 @@
 package com.imooc.sell.service.impl;
 
 import com.imooc.sell.dto.OrderDTO;
+import com.imooc.sell.service.OrderService;
 import com.imooc.sell.service.PayService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -19,9 +20,18 @@ public class PayServiceImplTest {
     @Autowired
     private PayService payService;
 
+    @Autowired
+    private OrderService orderService;
+
     @Test
     public void create() {
         OrderDTO orderDTO = new OrderDTO();
         payService.create(orderDTO); //测试先传一个空的过去，测试你配置是否成功
+    }
+
+    @Test
+    public void refund(){
+        OrderDTO orderDTO = orderService.findOne("xxxxx");
+        payService.refund(orderDTO);
     }
 }

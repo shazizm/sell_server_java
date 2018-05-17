@@ -13,6 +13,7 @@ import com.imooc.sell.exception.SellException;
 import com.imooc.sell.repository.OrderDetailRepository;
 import com.imooc.sell.repository.OrderMasterRepository;
 import com.imooc.sell.service.OrderService;
+import com.imooc.sell.service.PayService;
 import com.imooc.sell.service.ProductInfoService;
 import com.imooc.sell.utils.GenKeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailRepository orderDetailRepository;
     @Autowired
     private OrderMasterRepository orderMasterRepository;
+    @Autowired
+    private PayService payService;
 
 
     @Override
@@ -166,7 +169,10 @@ public class OrderServiceImpl implements OrderService {
 
         //4 如果已经支付，需要退款
         if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())){
-            //TODO
+            //TODO 8-7 11:30
+            payService.refund(orderDTO);
+            //退款成功后，在微信端，可以看到退款通知，白天一般立刻到。
+            //从系统看，refundResponse.outRefundNo 有 值，就是退款成功。
         }
         return orderDTO;
     }

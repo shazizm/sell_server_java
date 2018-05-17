@@ -6,14 +6,19 @@ import com.imooc.sell.exception.SellException;
 import com.imooc.sell.service.OrderService;
 import com.imooc.sell.service.PayService;
 import com.imooc.sell.utils.JsonUtil;
+import com.imooc.sell.utils.MathUtil;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
+import com.lly835.bestpay.model.RefundRequest;
+import com.lly835.bestpay.model.RefundResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.math.BigDecimal;
 
 @Service
 @Slf4j
@@ -59,14 +64,15 @@ public class PayServiceImpl implements PayService {
         return payResponse;
     }
 
-    @Override
+    @Override //微信业务上 通知会发好几次，所以微信支付文档 业务 的 第11步，需要系统给 微信回一个
     public PayResponse notify(@RequestBody String notifyData){ //notifyData 微信送来的xml字符串
 
-        //异步通知安全性注意
+        //异步通知安全性注意(其它支付方式也是一样的，需要这几步验证)
         //1.验证签名 (验证是不是微信发来的)  【bestPayService 已经做了】
         //2.检查支付通知 是 什么状态，比如支付成功    【bestPayService 已经做了】
         //3.校验订单金额，和 微信返回的金额，是否一致
-        //4.支付人（下单人 是否 是支付的人 ）
+        //4.支付人（下单人 是否 是支付的人 ）【这里没有去判断】
+        //最后 需要通知微信收到支付成功消息，并完成了修改系统订单支付状态，不过这步不在Service里做，应该放在Controller里去做。
 
         PayResponse payResponse = bestPayService.asyncNotify(notifyData);
         log.info("【微信支付】 异步通知，payResponse={}", JsonUtil.toJson(payResponse));
@@ -82,7 +88,11 @@ public class PayServiceImpl implements PayService {
         }
 
         //判断金额是否一致
-        if(orderDTO.getOrderAmount().equals(payResponse.getOrderAmount())){
+        //对比方法一，错误，if(orderDTO.getOrderAmount().equals(payResponse.getOrderAmount())){  //这种比较方法是java初学者一种常见的问题
+        //对比方法二，依然错误，if(orderDTO.getOrderAmount().compareTo(new BigDecimal(payResponse.getOrderAmount())) != 0){  //应转换成 BigDecimal,等于0就是一致。另外更不要用double去比较，一样会出错。
+        //方法三，能用。。。
+        if(MathUtil.equals(payResponse.getOrderAmount(), orderDTO.getOrderAmount().doubleValue())){
+
             log.error("【微信支付】异步通知，订单金额不一致，orderId={}, 微信通知金额={}， 系统金额={}",
                     payResponse.getOrderId(),
                     payResponse.getOrderAmount(),
@@ -96,4 +106,19 @@ public class PayServiceImpl implements PayService {
         return payResponse;
     }
 
+    //微信退款
+    @Override
+    public RefundResponse refund(OrderDTO orderDTO) {
+        RefundRequest refundRequest = new RefundRequest();
+
+        refundRequest.setOrderId(orderDTO.getOrderId());
+        refundRequest.setOrderAmount(orderDTO.getOrderAmount().doubleValue());
+        refundRequest.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
+
+        log.info("【微信退款】request={}", JsonUtil.toJson(refundRequest));
+        RefundResponse refundResponse = bestPayService.refund(refundRequest);
+        log.info("【微信退款】response={}", JsonUtil.toJson(refundResponse));
+
+        return refundResponse; //在refundResponse 里有一个 退款号（sdk自动 把订单号，设成退款号）。订单号对应支付流水号
+    }
 }

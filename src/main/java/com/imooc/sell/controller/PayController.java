@@ -50,5 +50,8 @@ public class PayController {
     public void notify(@RequestBody String notifyData) {
 
         payService.notify(notifyData);
+
+        //这里给微信返回一个修改订单状态完毕，微信就不一直给发消息了
+        return new ModelAndView("pay/success");
     }
 }
