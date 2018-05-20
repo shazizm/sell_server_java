@@ -232,4 +232,15 @@ public class OrderServiceImpl implements OrderService {
         // 支付状态是支付状态，不修改订单状态
         return orderDTO;
     }
+
+    @Override
+    public Page<OrderDTO> findList(Pageable pageable) {
+
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
+
+        List<OrderDTO> orderDTOList =OrderMaster2OrderDTOConverter.convert(orderMasterPage.getContent()); //补学 这里入参应该是一个OrderMaster的List
+
+        Page<OrderDTO> orderDTOPage = new PageImpl<OrderDTO>(orderDTOList, pageable, orderMasterPage.getTotalElements()); //TODO 补学 PageImpl
+        return orderDTOPage;
+    }
 }
