@@ -31,7 +31,11 @@ public class SellerOrderController {
         PageRequest request = PageRequest.of(page-1, size); //因为是从0开始,不过这里得试试
         Page<OrderDTO> orderDTOPage = orderService.findList(request);
 
+        //orderDTOPage.getTotalPages();
+
         map.put("orderDTOPage", orderDTOPage);
+        map.put("currentPage", page);
+        map.put("size", size);
         return new ModelAndView("order/list", map);
 
     }
