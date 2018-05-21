@@ -32,11 +32,15 @@
                             <td>${item.buyerPhone}</td>
                             <td>${item.buyerAddress}</td>
                             <td>${item.orderAmount}</td>
-                            <td>${item.orderStatus}</td>
-                            <td>${item.payStatus}</td>
+                            <td>${item.getOrderStatusEnum().message}</td>
+                            <td>${item.getPayStatusEnum().message}</td>
                             <td>${item.createTime}</td>
-                            <td>详情</td>
-                            <td>取消</td>
+                            <td><a href="/sell/seller/order/detail?orderId=${item.orderId}">详情</a></td>
+                            <td>
+                                <#if item.getOrderStatusEnum().message != "已取消">
+                                    <a href="/sell/seller/order/cancel?orderId=${item.orderId}">取消</a>
+                                </#if>
+                            </td>
                         </tr>
 
                         </#list>

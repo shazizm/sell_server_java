@@ -16,6 +16,7 @@ import com.imooc.sell.service.OrderService;
 import com.imooc.sell.service.PayService;
 import com.imooc.sell.service.ProductInfoService;
 import com.imooc.sell.utils.GenKeyUtil;
+import com.imooc.sell.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,23 +108,34 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO findOne(String orderId) {
 
-        OrderMaster orderMaster = orderMasterRepository.findById(orderId).get();
-        if(orderMaster == null){
+//        OrderMaster orderMaster = orderMasterRepository.findById(orderId).get(); //TODO 这里为空时处理方式不知道
+//        log.info("【findById为空时返回的数据】null={}", JsonUtil.toJson(orderMaster));
+//        if(orderMaster == null){
+//            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+//        }
+        Optional<OrderMaster> optional = orderMasterRepository.findById(orderId);
+
+        if(optional.isPresent()){ //TODO 判断方法很奇葩
+            OrderMaster orderMaster = optional.get();
+            //如果有 继续查询 订单详情
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
+            //TODO 判断List为空 用一个奇怪的方法
+            if(CollectionUtils.isEmpty(orderDetailList)){
+                throw new SellException(ResultEnum.ORDERDETAIL_NOT_EXIST);
+            }
+
+            OrderDTO newOrderDTO = new OrderDTO();
+            BeanUtils.copyProperties(orderMaster, newOrderDTO); //把查出的orderMaster 加到空newOrderDTO
+
+            newOrderDTO.setOrderDetailList(orderDetailList); //在把查出来的 orderDetailList 加到空newOrderDTO上
+
+            return newOrderDTO;
+
+        }else{
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
-        //如果有 继续查询 订单详情
-        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
-        // 判断List为空 用一个奇怪的方法
-        if(CollectionUtils.isEmpty(orderDetailList)){
-            throw new SellException(ResultEnum.ORDERDETAIL_NOT_EXIST);
-        }
 
-        OrderDTO newOrderDTO = new OrderDTO();
-        BeanUtils.copyProperties(orderMaster, newOrderDTO); //把查出的orderMaster 加到空newOrderDTO
 
-        newOrderDTO.setOrderDetailList(orderDetailList); //在把查出来的 orderDetailList 加到空newOrderDTO上
-
-        return newOrderDTO;
     }
 
     @Override
