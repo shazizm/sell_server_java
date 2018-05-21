@@ -1,5 +1,6 @@
 package com.imooc.sell.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.imooc.sell.dataObject.OrderDetail;
@@ -7,6 +8,7 @@ import com.imooc.sell.dataObject.OrderMaster;
 import com.imooc.sell.enums.OrderStatusEnum;
 import com.imooc.sell.enums.PayStatusEnum;
 import com.imooc.sell.serializer.Date2LongSerializer;
+import com.imooc.sell.utils.EnumUtil;
 import lombok.Data;
 
 import javax.persistence.Id;
@@ -44,5 +46,13 @@ public class OrderDTO {
     //在dto 里 增加 OrderMaster 要传输的数据
     List<OrderDetail> orderDetailList; //= new ArrayList<>(); //给个空字符串值，一遍orderDetailList为null时，也要现实成 []
 
+    @JsonIgnore //加上这个注解，返回json时就会忽略这个方法
+    public OrderStatusEnum getOrderStatusEnum(){
+        return EnumUtil.getByCode(orderStatus, OrderStatusEnum.class);
+    }
 
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum(){
+        return EnumUtil.getByCode(payStatus, PayStatusEnum.class);
+    }
 }
