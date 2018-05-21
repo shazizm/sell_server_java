@@ -25,13 +25,13 @@ public class PayServiceImplTest {
 
     @Test
     public void create() {
-        OrderDTO orderDTO = new OrderDTO();
+        OrderDTO orderDTO = orderService.findOne("1526811892315140500");
         payService.create(orderDTO); //测试先传一个空的过去，测试你配置是否成功
     }
 
     @Test
     public void refund(){
-        OrderDTO orderDTO = orderService.findOne("xxxxx");
+        OrderDTO orderDTO = orderService.findOne("1526885411870110036");
         payService.refund(orderDTO);
     }
 }

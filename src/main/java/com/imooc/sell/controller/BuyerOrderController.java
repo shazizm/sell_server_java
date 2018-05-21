@@ -84,6 +84,7 @@ public class BuyerOrderController {
     @PostMapping("/cancel")
     public ResultViewObject cancel(@RequestParam("openid") String openid,
                                    @RequestParam("orderId") String orderId) {
+        // http://mishi.fantreal.com/sell/buyer/order/cancel?openid=ouFrCt79Mkwwn-wdoxh_IZ5Z_opo$orderId=1526888564952912639
         //TODO 不安全做法，改进
         OrderDTO orderDTO = orderService.findOne(orderId);
 

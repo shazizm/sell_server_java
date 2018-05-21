@@ -29,7 +29,8 @@ public class WechatController {
     private WxMpService wxMpService; //TODO 这里生成的 wxMpService 已经是配好的了。在/config/WechatMpConfig里调 WechatAccountConfig（它里面调的application.yml）
 
     //2. 调用方法
-    //要求授权用户信息 带上跳转url 向微信 要 code
+    //要求授权用户信息 带上跳转url 向微信 要 code,测试时把链接下面链接发给自己微信，点击即可
+    //http://mishi.fantreal.com/sell/wechat/authorize?state=http://mishi.fantreal.com/sell/buyer/product/list
     @GetMapping("/authorize")
     public String authorize(@RequestParam("state") String returnUrl) {
 
@@ -46,7 +47,8 @@ public class WechatController {
     public String userInfo(@RequestParam("code") String code,
                            @RequestParam("state") String returnUrl) {
         WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
-
+        log.info("【微信网页授权】跳转完毕，获取code，result={}", code);
+        log.info("【微信网页授权】跳转完毕，获取returnUrl，result={}", returnUrl);
         //拿openid
         try {
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
@@ -56,7 +58,7 @@ public class WechatController {
         }
         //如果没问题，就可以用getOpenId()来获取openid
         String openId = wxMpOAuth2AccessToken.getOpenId();
-
+        log.info("【微信网页授权】跳转完毕，sdk拿openid，，result={}", openId);
         return "redirect:" + returnUrl + "?openid=" + openId; //这里的 returnUrl 一般就是你要提供服务的网址，后面带上openid就是为了用户识别登陆用。
     }
 }

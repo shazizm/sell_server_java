@@ -1,6 +1,6 @@
 <script>
     //按理说这个代码要在前端代码里，比如vue里，但是如果有多个页面都需要支付，这样把代码统一到后端，vue端只掉一个orderId 和 returnUrl 就可以了
-    //通过 此 链接 mishi.fantreal.com/sell/pay.html 访问
+    //通过 create.frl 模板构建的
     function onBridgeReady(){
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
@@ -18,7 +18,10 @@
                     // 调用支付JSAPI 如果提示缺少参数：total_fee，请检查预支付会话标识prepay_id是否已失效
 
                     //这里不做状态判断，直接传到后端
+
                     location.href = "${returnUrl}";
+
+
                 }
         );
     }
@@ -32,4 +35,4 @@
     }else{
         onBridgeReady();
     }
-</script>>
+</script>

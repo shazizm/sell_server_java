@@ -28,7 +28,9 @@ public class OrderServiceImplTest {
     @Autowired
     private OrderServiceImpl orderService;
 
-    private final String BUYER_OPENID = "110110";
+    //private final String BUYER_OPENID = "o7Uz6wCK2WQaMqXAS27DnsgthcCE"; //幻想现实服务号
+
+    private final String BUYER_OPENID = "ouFrCt79Mkwwn-wdoxh_IZ5Z_opo"; //密室服务号
 
     private final String ORDER_ID = "1526113087884459941";
 
@@ -36,21 +38,21 @@ public class OrderServiceImplTest {
     public void create() {
         OrderDTO orderDTO = new OrderDTO();
 
-        orderDTO.setBuyerName("张铭");
-        orderDTO.setBuyerAddress("山西7天酒店");
-        orderDTO.setBuyerPhone("13381193434");
+        orderDTO.setBuyerName("唐丽");
+        orderDTO.setBuyerAddress("北京沙窝");
+        orderDTO.setBuyerPhone("13366668888");
         orderDTO.setBuyerOpenid(BUYER_OPENID);
 
         //购物车
         List<OrderDetail> orderDetailList = new ArrayList<>();
 
         OrderDetail o1 = new OrderDetail();
-        o1.setProductId("suiji123458"); //跳弹
+        o1.setProductId("suiji000002");
         o1.setProductQuantity(1);
         orderDetailList.add(o1);
 
         OrderDetail o2 = new OrderDetail();
-        o2.setProductId("suiji123459"); //胸罩
+        o2.setProductId("suiji000008");
         o2.setProductQuantity(2);
 
         orderDetailList.add(o2);
@@ -99,5 +101,12 @@ public class OrderServiceImplTest {
         Assert.assertEquals(PayStatusEnum.SUCCESS.getCode(), result.getPayStatus());
     }
 
+    @Test
+    public void list(){
+        PageRequest request = PageRequest.of(0,2); //这里不用 new PageRequest 了
+        Page<OrderDTO> orderDTOPage = orderService.findList(request);
+        Assert.assertNotEquals(0, orderDTOPage.getTotalElements());
+        //Assert.asserTrue("查询所有的订单列表", orderDTOPage.getTotalElements() > 0); //另一种判断写法
+    }
 
 }

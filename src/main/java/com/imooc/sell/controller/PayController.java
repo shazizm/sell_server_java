@@ -28,13 +28,17 @@ public class PayController {
     public ModelAndView create(@RequestParam("orderId") String orderId,
                                @RequestParam("returnUrl") String returnUrl,
                                Map<String, Object> map){ //这个参数为 payService 用的
+
+        //发起支付的参考链接
+        //http://mishi.fantreal.com/sell/pay/create?orderId=1526890839122203786&returnUrl=http://mishi.fantreal.com/sell/buyer/product/list
+
         //1. 查询订单
         OrderDTO orderDTO = orderService.findOne(orderId);
         if(orderDTO == null){
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
 
-        //2. 发起支付 （具体写在service里）。
+        //2. 发起支付 （具体写在service里）(这一步完成，会返回prepay_id和其它参数，注入后端渲染的前端模板页面，再调起支付)。
         PayResponse payResponse = payService.create(orderDTO); //把订单 给 payService.create 去完成支付，返回 payResponse。
 
         //map.put("orderId", "111111"); //第一个参数可以直接穿 key value对，也可以传一个对象比如下行,使用的时候 在 html 里 直接 ${orderId}
@@ -47,9 +51,9 @@ public class PayController {
     }
 
     @PostMapping("/notify") //../sell/pay/notify
-    public void notify(@RequestBody String notifyData) {
+    public ModelAndView notify(@RequestBody String notifyData) {
 
-        payService.notify(notifyData);
+        payService.notify(notifyData); //收到通知。（修改订单状态）
 
         //这里给微信返回一个修改订单状态完毕，微信就不一直给发消息了
         return new ModelAndView("pay/success");

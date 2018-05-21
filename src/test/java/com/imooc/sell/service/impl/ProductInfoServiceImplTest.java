@@ -48,11 +48,11 @@ public class ProductInfoServiceImplTest {
     public void save() {
         ProductInfo productInfo = new ProductInfo();
 
-        productInfo.setProductId("suiji323459");
-        productInfo.setProductName("高跟鞋");
-        productInfo.setProductPrice(new BigDecimal(345));
-        productInfo.setProductStock(10);
-        productInfo.setProductDescription("尖的扎死人");
+        productInfo.setProductId("suiji000002");
+        productInfo.setProductName("环保袋");
+        productInfo.setProductPrice(new BigDecimal(0.01));
+        productInfo.setProductStock(1000);
+        productInfo.setProductDescription("反正就是测试用");
         productInfo.setProductIcon("http://vvv.jpg");
         productInfo.setProductStatus(ProductStatusEnum.UP.getCode()); //上架
         productInfo.setCategoryType(2);

@@ -51,14 +51,21 @@ public class PayServiceImpl implements PayService {
 //        //商户证书路径 keyPath
         PayRequest payRequest = new PayRequest();
 
+        //下单的 用户openid
         payRequest.setOpenid(orderDTO.getBuyerOpenid()); //获取 openId
-        payRequest.setOrderAmount(orderDTO.getOrderAmount().doubleValue()); //获取 orderAmout， 因为setOrderAmout()参数要求double型，所以这里转一下
+        //下单的 金额
+        payRequest.setOrderAmount(orderDTO.getOrderAmount().doubleValue()); //TODO 这里应该有bug。0.03的金额经常被转成0.02。获取 orderAmout， 因为setOrderAmout()参数要求double型，所以这里转一下
+        log.info("【微信支付】发起支持 原始总金额 origin={}", orderDTO.getOrderAmount());
+        log.info("【微信支付】发起支持 转完总金额 transform={}", orderDTO.getOrderAmount().doubleValue());
+        //下单的 订单id
         payRequest.setOrderId(orderDTO.getOrderId());
+        //这里写死，虽然不知道是干啥用
         payRequest.setOrderName(ORDER_NAME);
+        //下单的 类型 微信公众号
         payRequest.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
         log.info("【微信支付】发起支持 request={}", JsonUtil.toJson(payRequest));
 
-        PayResponse payResponse = bestPayService.pay(payRequest); //TODO 重点标注 这里之后开通完商户平台 要再跑一下debug测试 这一步如果成功了 统一下单就算拿到了prepayId
+        PayResponse payResponse = bestPayService.pay(payRequest); //TODO 此TODO已经完成。 重点标注 这里之后开通完商户平台 要再跑一下debug测试 这一步如果成功了 统一下单就算拿到了prepayId
         log.info("【微信支付】发起支付 response={}", JsonUtil.toJson(payResponse)); //将对象转成 json 输出log显示
 
         return payResponse;
@@ -87,11 +94,15 @@ public class PayServiceImpl implements PayService {
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
 
-        //判断金额是否一致
+        //3 判断金额是否一致
         //对比方法一，错误，if(orderDTO.getOrderAmount().equals(payResponse.getOrderAmount())){  //这种比较方法是java初学者一种常见的问题
         //对比方法二，依然错误，if(orderDTO.getOrderAmount().compareTo(new BigDecimal(payResponse.getOrderAmount())) != 0){  //应转换成 BigDecimal,等于0就是一致。另外更不要用double去比较，一样会出错。
         //方法三，能用。。。
-        if(MathUtil.equals(payResponse.getOrderAmount(), orderDTO.getOrderAmount().doubleValue())){
+        log.info("【微信支付】异步通知，订单金额是否一致，orderId={}, 微信通知金额={}， 系统金额={}",
+                payResponse.getOrderId(),
+                payResponse.getOrderAmount(),
+                orderDTO.getOrderAmount());
+        if(!MathUtil.equals(payResponse.getOrderAmount(), orderDTO.getOrderAmount().doubleValue())){
 
             log.error("【微信支付】异步通知，订单金额不一致，orderId={}, 微信通知金额={}， 系统金额={}",
                     payResponse.getOrderId(),
