@@ -37,7 +37,7 @@
                             <td>${item.createTime}</td>
                             <td><a href="/sell/seller/order/detail?orderId=${item.orderId}">详情</a></td>
                             <td>
-                                <#if item.getOrderStatusEnum().message != "已取消">
+                                <#if item.getOrderStatusEnum().message == "新订单">
                                     <a href="/sell/seller/order/cancel?orderId=${item.orderId}">取消</a>
                                 </#if>
                             </td>
