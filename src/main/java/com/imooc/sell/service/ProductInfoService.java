@@ -22,4 +22,10 @@ public interface ProductInfoService {
 
 //    减库存
     void decreateStock(List<CartDTO> cartDTOList);
+
+    //上架
+    ProductInfo onSale(String productId);
+
+    //下架
+    ProductInfo offSale(String productId);
 }
