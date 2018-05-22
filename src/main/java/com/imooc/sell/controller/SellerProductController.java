@@ -2,6 +2,7 @@ package com.imooc.sell.controller;
 
 import com.imooc.sell.dataObject.ProductInfo;
 import com.imooc.sell.dto.OrderDTO;
+import com.imooc.sell.exception.SellException;
 import com.imooc.sell.service.ProductInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,41 @@ public class SellerProductController {
         map.put("currentPage", page);
         map.put("size", size);
         return new ModelAndView("product/list", map);
+    }
+
+    @RequestMapping("/on_sale")
+    public ModelAndView onSale(@RequestParam("productId") String productId,
+                               Map<String, Object> map){
+
+        try {
+            productInfoService.onSale(productId);
+        } catch (SellException e){
+
+            log.error("【卖家端上架商品时】 发生异常 {}", e.getMessage());
+            map.put("msg", e.getMessage());
+            map.put("url","/sell/seller/product/list");
+            return new ModelAndView("common/error", map);
+        }
+
+        map.put("url", "/sell/seller/product/list");
+        return new ModelAndView("common/success", map);
+    }
+
+    @RequestMapping("/off_sale")
+    public ModelAndView offSale(@RequestParam("productId") String productId,
+                               Map<String, Object> map){
+
+        try {
+            productInfoService.offSale(productId);
+        } catch (SellException e){
+
+            log.error("【卖家端下架商品时】 发生异常 {}", e.getMessage());
+            map.put("msg", e.getMessage());
+            map.put("url","/sell/seller/product/list");
+            return new ModelAndView("common/error", map);
+        }
+
+        map.put("url", "/sell/seller/product/list");
+        return new ModelAndView("common/success", map);
     }
 }
