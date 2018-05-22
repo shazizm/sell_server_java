@@ -25,13 +25,13 @@
                             </div>
                             <div class="form-group">
                                 <label>描述</label>
-                                <input name="productDescription" value="${(productInfo.productDescription)!''}" type="number" class="form-control" />
+                                <input name="productDescription" value="${(productInfo.productDescription)!''}" type="text" class="form-control" />
                             </div>
 
                             <div class="form-group">
                                 <label>图片</label>
                                 <img height="100" width="100" src="${(productInfo.productIcon)!''}" alt="">
-                                <input name="productIcon" value="${(productInfo.productIcon)!''}" type="number" class="form-control"/>
+                                <input name="productIcon" value="${(productInfo.productIcon)!''}" type="text" class="form-control"/>
                             </div>
 
                             <div class="form-group">

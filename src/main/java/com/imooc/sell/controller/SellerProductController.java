@@ -4,25 +4,30 @@ import com.imooc.sell.dataObject.ProductCategory;
 import com.imooc.sell.dataObject.ProductInfo;
 import com.imooc.sell.dto.OrderDTO;
 import com.imooc.sell.exception.SellException;
+import com.imooc.sell.form.ProductForm;
 import com.imooc.sell.service.ProductCategoryService;
 import com.imooc.sell.service.ProductInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@Slf4j
 @RequestMapping("/seller/product")
+@Slf4j
 public class SellerProductController {
 
     @Autowired
@@ -83,6 +88,7 @@ public class SellerProductController {
         return new ModelAndView("common/success", map);
     }
 
+    //查看 商品
     @RequestMapping("/index")
     public ModelAndView index(@RequestParam(value = "productId", required = false) String productId,
                       Map<String, Object> map){
@@ -96,5 +102,33 @@ public class SellerProductController {
         map.put("categoryList", productCategoryList);
 
         return new ModelAndView("product/index", map);
+    }
+
+    //创建 和 更新 都用这个方法
+    @PostMapping("/save")
+    public ModelAndView save(@Valid ProductForm form,
+                             BindingResult bindingResult, //这里验证规则是怎么来？？
+                             Map<String, Object> map){
+        if(bindingResult.hasErrors()){ //先判断有没有表单校验错误，如果有错误先跳到错误界面
+            log.error("【卖家端商品新建/更新】 发生异常 {}", bindingResult.getFieldError().getDefaultMessage());
+            map.put("msg", bindingResult.getFieldError().getDefaultMessage());
+            map.put("url","/sell/seller/product/index");
+            return new ModelAndView("common/error", map);
+        }
+
+        try{
+            ProductInfo productInfo = productInfoService.findOne(form.getProductId());
+            BeanUtils.copyProperties(form, productInfo); //TODO 前面的覆盖后面的复制方式，如果key没有就不覆盖
+            productInfoService.save(productInfo);
+        }catch (SellException e) {
+            map.put("msg", e.getMessage());
+            map.put("url", "/sell/seller/product/index");
+            return new ModelAndView("common/error", map);
+        }
+
+
+        //如果一切正常
+        map.put("url", "/sell/seller/product/list");
+        return new ModelAndView("common/success", map);
     }
 }
