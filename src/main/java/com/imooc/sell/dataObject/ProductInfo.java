@@ -30,8 +30,8 @@ public class ProductInfo {
     private String productDescription;
 //  小图
     private String productIcon;
-//  商品状态 0正常 1下架
-    private Integer productStatus;
+//  商品状态 0正常 1下架 //新增商品时，默认上架,new ProductInfo的时候 这个值就默认有了
+    private Integer productStatus = ProductStatusEnum.UP.getCode();
 //  商品 和 类目 的关系就用 类目编号来关联
     private Integer categoryType;
 

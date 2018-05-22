@@ -7,6 +7,7 @@ import com.imooc.sell.exception.SellException;
 import com.imooc.sell.form.ProductForm;
 import com.imooc.sell.service.ProductCategoryService;
 import com.imooc.sell.service.ProductInfoService;
+import com.imooc.sell.utils.GenKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import sun.security.util.KeyUtil;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -116,8 +118,15 @@ public class SellerProductController {
             return new ModelAndView("common/error", map);
         }
 
+        ProductInfo productInfo = new ProductInfo(); // new的时候自带上架默认值
         try{
-            ProductInfo productInfo = productInfoService.findOne(form.getProductId());
+            if(!StringUtils.isEmpty(form.getProductId())){ //有productId 这是修改操作
+                productInfo = productInfoService.findOne(form.getProductId());
+            }else{  // 没有 productId 这是 新增操作
+                //新增需要  随机一个 productId
+                form.setProductId(GenKeyUtil.genUniqueKey());
+            }
+
             BeanUtils.copyProperties(form, productInfo); //TODO 前面的覆盖后面的复制方式，如果key没有就不覆盖
             productInfoService.save(productInfo);
         }catch (SellException e) {
