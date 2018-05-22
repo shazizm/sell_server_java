@@ -1,19 +1,23 @@
 package com.imooc.sell.controller;
 
+import com.imooc.sell.dataObject.ProductCategory;
 import com.imooc.sell.dataObject.ProductInfo;
 import com.imooc.sell.dto.OrderDTO;
 import com.imooc.sell.exception.SellException;
+import com.imooc.sell.service.ProductCategoryService;
 import com.imooc.sell.service.ProductInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,6 +27,9 @@ public class SellerProductController {
 
     @Autowired
     private ProductInfoService productInfoService;
+
+    @Autowired
+    private ProductCategoryService productCategoryService;
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam(value = "page", defaultValue = "1") Integer page,        //第几页
@@ -74,5 +81,20 @@ public class SellerProductController {
 
         map.put("url", "/sell/seller/product/list");
         return new ModelAndView("common/success", map);
+    }
+
+    @RequestMapping("/index")
+    public ModelAndView index(@RequestParam(value = "productId", required = false) String productId,
+                      Map<String, Object> map){
+        if(!StringUtils.isEmpty(productId)){
+            ProductInfo productInfo = productInfoService.findOne(productId);
+            map.put("productInfo", productInfo);
+        }
+
+        //查询所有商品类目
+        List<ProductCategory> productCategoryList = productCategoryService.findAll();
+        map.put("categoryList", productCategoryList);
+
+        return new ModelAndView("product/index", map);
     }
 }
