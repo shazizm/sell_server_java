@@ -28,9 +28,9 @@ public class OrderServiceImplTest {
     @Autowired
     private OrderServiceImpl orderService;
 
-    //private final String BUYER_OPENID = "o7Uz6wCK2WQaMqXAS27DnsgthcCE"; //幻想现实服务号
+    private final String BUYER_OPENID = "o7Uz6wCK2WQaMqXAS27DnsgthcCE"; //幻想现实服务号
 
-    private final String BUYER_OPENID = "ouFrCt79Mkwwn-wdoxh_IZ5Z_opo"; //密室服务号
+    //private final String BUYER_OPENID = "ouFrCt79Mkwwn-wdoxh_IZ5Z_opo"; //密室服务号
 
     private final String ORDER_ID = "1526113087884459941";
 
@@ -38,7 +38,7 @@ public class OrderServiceImplTest {
     public void create() {
         OrderDTO orderDTO = new OrderDTO();
 
-        orderDTO.setBuyerName("坏坏");
+        orderDTO.setBuyerName("拉拉");
         orderDTO.setBuyerAddress("小镇客房");
         orderDTO.setBuyerPhone("13366668888");
         orderDTO.setBuyerOpenid(BUYER_OPENID);
@@ -48,12 +48,12 @@ public class OrderServiceImplTest {
 
         OrderDetail o1 = new OrderDetail();
         o1.setProductId("suiji000003");
-        o1.setProductQuantity(5);
+        o1.setProductQuantity(2);
         orderDetailList.add(o1);
 
         OrderDetail o2 = new OrderDetail();
         o2.setProductId("suiji000005");
-        o2.setProductQuantity(6);
+        o2.setProductQuantity(1);
 
         orderDetailList.add(o2);
 

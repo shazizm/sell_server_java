@@ -30,7 +30,7 @@ public class PayController {
                                Map<String, Object> map){ //这个参数为 payService 用的
 
         //发起支付的参考链接
-        //http://mishi.fantreal.com/sell/pay/create?orderId=1526890839122203786&returnUrl=http://mishi.fantreal.com/sell/buyer/product/list
+        //http://mishi.fantreal.com/sell/pay/create?orderId=1527058399989135236&returnUrl=http://mishi.fantreal.com/sell/buyer/product/list
 
         //1. 查询订单
         OrderDTO orderDTO = orderService.findOne(orderId);

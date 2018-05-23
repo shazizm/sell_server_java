@@ -13,15 +13,20 @@ server:
 #    com.imooc.sell.LoggerTest: debug
 
 wechat:
-#  孙巍——服务号，H5支付申请没开通，张铭——openid：ouFrCt79Mkwwn-wdoxh_IZ5Z_opo
-  mpAppId: wx2f8a32822d551206
-  mpAppSecret: b75b7137c3b0345c8ac5318d9708d132
-  mchId: 1504310951
-  mchKey: 8c0f5be32289da7d56675b2807637d71
+#  孙巍——服务号，H5支付申请没开通，开放平台没认证，张铭——openid：ouFrCt79Mkwwn-wdoxh_IZ5Z_opo
+#  mpAppId: wx2f8a32822d551206
+#  mpAppSecret: b75b7137c3b0345c8ac5318d9708d132
+#  openAppId:
+#  openAppSecret:
+#  mchId: 1504310951
+#  mchKey: 8c0f5be32289da7d56675b2807637d71
+
 #  雪丽——服务号，张铭——openid：o7Uz6wCK2WQaMqXAS27DnsgthcCE
-#  mpAppId: wxb8b9e7e170067261
-#  mpAppSecret: f0f67ef9c40d1d2330cb1ca59519e049
-#  mchId: 1435385202
-#  mchKey: fantreal2016mingfantreal2016ming
+  mpAppId: wxb8b9e7e170067261
+  mpAppSecret: f0f67ef9c40d1d2330cb1ca59519e049
+  openWebAppId: wx7b6d05038508e151
+  openWebAppSecret: 1cb81d78243625f5de8cd1a2a61a7c21
+  mchId: 1435385202
+  mchKey: fantreal2016mingfantreal2016ming
   mchKeyPath: /Users/zhangming/java_code/SpringBoot_projects/project_sell/weichat_cert/apiclient_cert.p12 #证书的下载，参考8-7 微信退款，实际支付也是需要的
   notifyUrl: http://mishi.fantreal.com/sell/pay/notify
