@@ -12,7 +12,7 @@ public class WechatPayConfig {
     @Autowired
     private WechatAccountConfig accountConfig; //引入config文件
 
-    @Bean
+    @Bean //这里老师用的自己的sdk
     public BestPayServiceImpl bestPayService(){
 
 

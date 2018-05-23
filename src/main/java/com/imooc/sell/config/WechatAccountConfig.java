@@ -12,6 +12,10 @@ public class WechatAccountConfig {
     private String mpAppId;
     //服务号 AppSecret
     private String mpAppSecret;
+    //微信开放平台 web应用(这里用来在web端扫码登陆)
+    private String openWebAppId;
+    //微信开放平台 web应用
+    private String openWebAppSecret;
     //商户号
     private String mchId;
     //商户密钥
