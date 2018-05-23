@@ -30,3 +30,8 @@ wechat:
   mchKey: fantreal2016mingfantreal2016ming
   mchKeyPath: /Users/zhangming/java_code/SpringBoot_projects/project_sell/weichat_cert/apiclient_cert.p12 #证书的下载，参考8-7 微信退款，实际支付也是需要的
   notifyUrl: http://mishi.fantreal.com/sell/pay/notify
+
+project-url:
+  wechatMpAuthorize: http://mishi.fantreal.com
+  wechatOpenWebAuthorize: http://mishi.fantreal.com
+  sell:

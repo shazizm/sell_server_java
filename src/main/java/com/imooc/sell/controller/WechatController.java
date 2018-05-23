@@ -1,7 +1,7 @@
 package com.imooc.sell.controller;
 
 
-import com.imooc.sell.config.WechatMpConfig;
+import com.imooc.sell.config.ProjectUrlConfig;
 import com.imooc.sell.enums.ResultEnum;
 import com.imooc.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLEncoder;
 
@@ -24,6 +23,9 @@ import java.net.URLEncoder;
 @Slf4j
 public class WechatController {
 
+    //ProjectUrl 配置
+    @Autowired
+    private ProjectUrlConfig projectUrlConfig;
 
     //12-5 一。配置 web端扫码登陆
     @Autowired
@@ -39,7 +41,7 @@ public class WechatController {
     @GetMapping("/authorize")
     public String authorize(@RequestParam("state") String returnUrl) {
 
-        String url = "http://mishi.fantreal.com/sell/wechat/userInfo"; //这里先写死之后，调通后，可以做一个动态配置
+        String url = projectUrlConfig.wechatMpAuthorize + "/sell/wechat/userInfo"; //这里先写死之后，调通后，可以做一个动态配置
         //第一个参数是 redirectUrl，第二个参数是 scope，第三个参数是 state
         String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl)); //TODO
         log.info("【微信公众号网页授权】获取code，result={}", redirectUrl);
@@ -73,7 +75,7 @@ public class WechatController {
     //12-5 二。调用方法 ，这里其实和 上面两个差不多。因为要扫二维码，我们就起名qr开头来 区分吧。
     @GetMapping("/qrAuthorize")
     public String qrAuthorize(@RequestParam("state") String returnUrl){
-        String url="http://mishi.fantreal.com/sell/wechat/qrUserInfo"; //先写死，也不知道什么时候能写活
+        String url= projectUrlConfig.wechatOpenWebAuthorize + "/sell/wechat/qrUserInfo"; //先写死，也不知道什么时候能写活
         //第一个参数是 redirectUrl，第二个参数是 scope(网页这里文档要求是 wx.login)，第三个参数是 state
         String redirectUrl = wxOpenWebService.buildQrConnectUrl(url, WxConsts.QrConnectScope.SNSAPI_LOGIN,URLEncoder.encode(returnUrl));
         return "redirect:" + redirectUrl;
@@ -93,7 +95,7 @@ public class WechatController {
             log.error("【web网页微信扫码授权】");
             throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getError().getErrorMsg());
         }
-        //如果没问题，就可以用getOpenId()来获取openid
+        //如果没问题，就可以用getOpenId()来获取openid //张铭在幻想现实web应用的 openid = oJIwWwJV4WUD5pomonrFhvT6naMI
         String openId = wxMpOAuth2AccessToken.getOpenId();
         log.info("【web网页微信扫码授权】跳转完毕，sdk拿openid，，result={}", openId);
         return "redirect:" + returnUrl + "?openid=" + openId; //这里的 returnUrl 一般就是你要提供服务的网址，后面带上openid就是为了用户识别登陆用。
