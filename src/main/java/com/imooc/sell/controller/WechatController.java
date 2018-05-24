@@ -71,7 +71,7 @@ public class WechatController {
 
 
 
-    //测试用链接： http://mishi.fantreal.com/sell/wechat/qrAuthorize?state=http://mishi.fantreal.com/sell/seller/product/list
+    //测试用链接： http://mishi.fantreal.com/sell/wechat/qrAuthorize?state=http://mishi.fantreal.com/sell/seller/login
     //12-5 二。调用方法 ，这里其实和 上面两个差不多。因为要扫二维码，我们就起名qr开头来 区分吧。
     @GetMapping("/qrAuthorize")
     public String qrAuthorize(@RequestParam("state") String returnUrl){
