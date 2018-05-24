@@ -6,11 +6,12 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/db_sell?characterEncoding=utf-8&useSSL=false
     username: root
     password: mysql_444444
-
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
   jackson:
     default-property-inclusion: non_null
-
+  redis:
+    host: 127.0.0.1
+    port: 6379
