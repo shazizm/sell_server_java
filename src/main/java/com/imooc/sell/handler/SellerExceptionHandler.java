@@ -20,7 +20,7 @@ public class SellerExceptionHandler {
         return new ModelAndView("redirect:"
                 .concat(projectUrlConfig.getWechatOpenWebAuthorize())
                 .concat("/sell/wechat/qrAuthorize")
-                .concat("?returnUrl=")
+                .concat("?state=")
                 .concat(projectUrlConfig.getSell())
                 .concat("/sell/seller/login")
         );

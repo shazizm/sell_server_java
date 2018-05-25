@@ -36,7 +36,7 @@ public class SellerUserController {
     private ProjectUrlConfig projectUrlConfig;
 
     @GetMapping("/login")
-    public ModelAndView login(@RequestParam("openid") String openid,
+    public ModelAndView login(@RequestParam("openid") String openid, //这里是 张铭的openWebApp的openid ：oJIwWwJV4WUD5pomonrFhvT6naMI  可以提前存在seller_info里
                               HttpServletResponse response,
                               Map<String, Object> map){
 

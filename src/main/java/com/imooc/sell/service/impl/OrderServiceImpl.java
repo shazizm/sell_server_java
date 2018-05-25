@@ -15,6 +15,7 @@ import com.imooc.sell.repository.OrderMasterRepository;
 import com.imooc.sell.service.OrderService;
 import com.imooc.sell.service.PayService;
 import com.imooc.sell.service.ProductInfoService;
+import com.imooc.sell.service.PushMessageService;
 import com.imooc.sell.utils.GenKeyUtil;
 import com.imooc.sell.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMasterRepository orderMasterRepository;
     @Autowired
     private PayService payService;
+    @Autowired
+    private PushMessageService pushMessageService;
 
 
     @Override
@@ -210,6 +213,10 @@ public class OrderServiceImpl implements OrderService {
             log.error("【完结订单】更新失败, orderMaster={}", orderMaster);
             throw new SellException(ResultEnum.ORDER_UPDATE_FAILED);
         }
+
+        //3. 推送微信公众号 模板消息
+        pushMessageService.orderStatus(orderDTO);
+        //这里需要注意，因为不是核心业务，所以这里如果失败的话，并不throw new xxxx，在service层，我们catch掉了，catch掉也只是打了一个log。并不想因为这一步重新回滚整个finish方法
 
         return orderDTO;
     }
