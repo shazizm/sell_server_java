@@ -37,3 +37,12 @@ project-url:
   wechatMpAuthorize: http://mishi.fantreal.com
   wechatOpenWebAuthorize: http://mishi.fantreal.com
   sell: http://mishi.fantreal.com
+
+# 这个是为了 mybatis 打log带出sql语句。生产环境就不用这么配置了
+logging:
+  level:
+    com.imooc.sell.dataObject.mapper: trace
+
+# mybatis 的sql语句假如用外部加载，那么xml文件目录配置这么写
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

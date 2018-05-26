@@ -1,10 +1,9 @@
 package com.imooc.sell.config;
 
+import lombok.Data;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
-
-import javax.websocket.server.ServerEndpoint;
 
 @Component
 public class WebSocketConfig {
