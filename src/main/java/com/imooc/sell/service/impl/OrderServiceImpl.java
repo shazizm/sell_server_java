@@ -12,10 +12,7 @@ import com.imooc.sell.enums.ResultEnum;
 import com.imooc.sell.exception.SellException;
 import com.imooc.sell.repository.OrderDetailRepository;
 import com.imooc.sell.repository.OrderMasterRepository;
-import com.imooc.sell.service.OrderService;
-import com.imooc.sell.service.PayService;
-import com.imooc.sell.service.ProductInfoService;
-import com.imooc.sell.service.PushMessageService;
+import com.imooc.sell.service.*;
 import com.imooc.sell.utils.GenKeyUtil;
 import com.imooc.sell.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +49,8 @@ public class OrderServiceImpl implements OrderService {
     private PayService payService;
     @Autowired
     private PushMessageService pushMessageService;
+    @Autowired
+    private WebSocket webSocket;
 
 
     @Override
@@ -98,13 +97,17 @@ public class OrderServiceImpl implements OrderService {
         orderMasterRepository.save(newOrderMaster); //主订单，写数据库
 
 
-        //4，成功的话扣库存
+        //4，成功的话 扣库存
         // 替换上面注释的实现方式a         //lambda的新式写法  //生成的是 库存用的 入参
         List<CartDTO> cartDTOList = orderDTO.getOrderDetailList().stream().map(e ->
             new CartDTO(e.getProductId(),e.getProductQuantity())
         ).collect(Collectors.toList());
-
         productInfoService.decreateStock(cartDTOList);
+
+        //5, websocket 发送消息
+        //webSocket.sendMessage("有新的订单");
+        webSocket.sendMessage(orderDTO.getOrderId());//直接把订单号传过去。
+
         return orderDTO; //为啥返回是它？
     }
 
